@@ -2,7 +2,11 @@
 
 An AI-powered healthcare assistant built for Telegram that helps users manage their daily calorie intake, track meals, and monitor their progress toward healthier eating habits.
 
-The project uses **Switch** to coordinate two specialized AI agents with different responsibilities. One manages personal information and nutritional planning, while the other handles food recognition, calorie tracking, and daily progress.
+The project is built around Switch as its central agent coordination platform. It brings together two specialized AI agents powered by different providers, 
+allowing them to collaborate through a shared room environment and maintain consistent user information.
+
+Through a Telegram bot, users can share pictures of their meals, receive calorie estimates, track their daily consumption, and get personalized 
+suggestions to improve their eating habits.
 
 ---
 
@@ -270,13 +274,60 @@ The project is demonstrated through a Telegram bot, covering the complete proces
 | Technology | Purpose |
 |---|---|
 | Telegram Bot | User interaction |
-| Switch | Agent coordination and room management |
+| Switch | Central agent coordination, shared rooms, agent management, and persistent shared context |
 | OpenCode | Provider powering the Init agent |
 | Codex | Provider powering the System agent |
 | AI Vision | Food identification from pictures |
 | Switch Room Documents | Persistent user profile storage |
 
-## 8. Getting Started
+
+## 8. Why Switch Is Essential
+
+Switch is the central foundation of the AI Healthcare Assistant. Rather than relying on a single general-purpose AI agent, the project uses Switch to coordinate two specialized agents, each powered by a different AI provider and responsible for a distinct part of the healthcare workflow.
+
+### Agent Collaboration
+
+The system consists of two agents working within the same Switch environment:
+
+- **Init (OpenCode):** Handles user onboarding, collects personal information, calculates nutritional requirements, and creates the user's nutritional profile.
+- **System (Codex):** Handles food recognition, calorie estimation, meal evaluation, and daily progress tracking.
+
+This separation allows each agent to focus on its responsibilities while contributing to one unified healthcare assistant.
+
+### Shared Context Through Switch Rooms
+
+One of the most important aspects of this architecture is shared user information.
+
+Both agents access the `user-profile` document maintained within the Switch room.
+
+- Init creates and updates the user's nutritional profile.
+- System uses the existing profile to evaluate meals against the user's personalized calorie requirements.
+- System updates the user's daily tracking information.
+- The shared document allows both agents to work with consistent user information.
+
+This means users do not need to repeatedly provide their personal information when interacting with different agents.
+
+### Multi-Provider Architecture
+
+The project demonstrates the ability to work with different AI providers through Switch:
+
+- OpenCode powers the Init agent.
+- Codex powers the System agent.
+
+Each agent uses its specialized instructions and provider while operating within the same Switch environment.
+
+This makes the architecture independent of a single AI provider and allows specialized AI capabilities to work together.
+
+### Why Switch Matters
+
+Switch is not simply an integration between Telegram and AI models. It provides the environment in which the project's specialized agents operate and share information.
+
+Without Switch, the project would lose its centralized agent coordination, shared room environment, and unified context between its specialized agents.
+
+**Switch transforms two separate AI agents into a coordinated healthcare assistant, providing users with one consistent experience through Telegram.**
+
+
+## 9. Getting Started
 
 ### Prerequisites
 
@@ -353,7 +404,7 @@ On the first interaction, Init handles user registration and creates the nutriti
 
 After the initial setup, users can share food pictures with the bot to track their meals, receive suggestions, and monitor their daily progress.
 
-## 9. Disclaimer
+## 10. Disclaimer
 
 This assistant provides AI-generated nutritional estimates and general wellness guidance. Food calorie estimations and BMI classifications may not always be accurate. It is not a substitute for professional medical advice. Users should consult a qualified healthcare professional before making significant dietary changes.
 
