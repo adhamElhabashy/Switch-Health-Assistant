@@ -286,30 +286,66 @@ The project is demonstrated through a Telegram bot, covering the complete proces
 - Codex configured as an agent provider.
 - Access to the required AI models and services.
 
-### Setup
 
-1. Clone the repository:
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/USERNAME/PROJECT.git
-cd PROJECT
+git clone https://github.com/YOUR_USERNAME/healthcare-assistant.git
+cd healthcare-assistant
 ```
 
-2. Configure your Telegram bot and connect it to Switch.
+### 2. Install and configure Switch
 
-3. Configure the two agents:
-   - `init` using the OpenCode provider.
-   - `system` using the Codex provider.
+1. Install Switch Console.
+2. Open Switch Console and create a local server or connect to an existing one.
+3. Install Docker if you're running a local server.
 
-4. Configure each agent with its respective responsibilities.
+### 3. Install and authenticate the AI providers
 
-5. Create a Switch room and connect both agents to it.
+The project uses two providers:
+* **OpenCode** for the init agent.
+* **Codex** for the system agent.
 
-6. Ensure both agents can access the `user-profile` room document.
+Install both providers and sign in using your own accounts:
+* [OpenCode documentation](#)
+* [Codex CLI documentation](#)
 
-7. Start the Switch server and activate the Telegram integration.
+Make sure both providers are available in Switch Console.
 
-8. Open the Telegram bot and start interacting with the assistant.
+### 4. Import the project YAML template
+
+This is where the project configuration happens.
+
+1. Open the `templates` folder in the cloned repository.
+2. Locate `healthcare-assistant.template.yaml`.
+3. Import the template into Switch Console using its template import option.
+4. Review the configuration and select the required providers and settings.
+5. Deploy the template.
+
+> **Note:** The template defines the two agents, their instructions, and the healthcare room, so you don't have to create and configure them individually.
+
+### 5. Connect Telegram
+
+1. Open Telegram and contact [@BotFather](https://t.me/botfather).
+2. Create a bot using `/newbot`.
+3. Copy the bot token.
+4. Disable Group Privacy in BotFather.
+5. In Switch Console, open your server's **Messaging Apps** section and connect Telegram using your bot token and username.
+6. Create a private Telegram group containing you and your bot.
+7. Link your Telegram account to Switch Console if requested.
+
+*See the [Telegram integration documentation](#).*
+
+### 6. Start using the assistant
+
+Open your private Telegram group and test the following:
+
+* Complete your nutritional profile.
+* Update your personal information.
+* Send a food picture for calorie estimation.
+* Confirm or reject meal suggestions.
+* Track remaining daily calories and your rating.
+* Report walking activity.
 
 ### Usage
 
