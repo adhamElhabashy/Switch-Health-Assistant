@@ -1,53 +1,53 @@
 # AI Healthcare Assistant
 
-A Telegram-based AI healthcare assistant that helps users manage their daily calorie intake, track meals, and monitor their progress toward healthier eating habits.
+An AI-powered healthcare assistant built for Telegram that helps users manage their daily calorie intake, track meals, and monitor their progress toward healthier eating habits.
 
-The project uses **Switch** to coordinate two specialized AI agents with separate responsibilities: one manages personal information and nutritional planning, while the other handles food recognition, calorie tracking, and daily progress.
+The project uses **Switch** to coordinate two specialized AI agents with different responsibilities. One manages personal information and nutritional planning, while the other handles food recognition, calorie tracking, and daily progress.
 
 ---
 
 ## 1. Project Overview
 
-The AI Healthcare Assistant provides users with a personalized daily calorie plan based on their personal information, activity level, and BMI.
+The AI Healthcare Assistant provides users with a personalized daily calorie plan based on their personal information, gender, age, weight, height, and activity level.
 
-After completing the initial setup, users can interact with the Telegram bot by sharing pictures of their meals. The assistant identifies the food, estimates its calories, and tracks the user's daily consumption. It also provides suggestions to help users stay within their recommended calorie targets.
+Through a Telegram bot, users can share pictures of their meals, receive calorie estimates, track their daily consumption, and get suggestions to improve their eating habits.
 
-### Main Features
+### Features
 
-- **Personal Profile:** Collects and maintains user information, including name, gender, age, height, weight, work type, and preferred meal times.
-- **BMR Calculation:** Calculates Basal Metabolic Rate using personal information.
-- **Daily Calorie Estimation:** Estimates daily energy requirements according to activity level.
-- **BMI Calculation:** Classifies BMI and adjusts calorie recommendations accordingly.
-- **Meal Distribution:** Divides daily calorie requirements into three main meals and three snacks.
+- **Personalized Profiles:** Collects and maintains personal information and preferred meal times.
+- **BMR Calculation:** Calculates Basal Metabolic Rate using gender-specific formulas.
+- **Daily Calorie Estimation:** Estimates daily energy requirements based on activity level.
+- **BMI Calculation:** Classifies Body Mass Index and adjusts calorie recommendations accordingly.
+- **Meal Planning:** Divides daily calorie requirements into three main meals and three snacks.
 - **Food Recognition:** Identifies food from pictures and estimates its calorie content.
-- **Meal Evaluation:** Compares consumed calories with the recommended allowance.
-- **Meal Improvement:** Suggests adjustments when a meal exceeds its recommended calories.
-- **Progress Rating:** Tracks daily progress through a rating system ranging from 0% to 100%.
+- **Meal Evaluation:** Compares consumed calories with recommended meal allowances.
+- **Meal Improvement:** Suggests adjustments to help users stay within their calorie targets.
+- **Progress Rating:** Tracks daily progress through a rating system from 0% to 100%.
 - **Activity Tracking:** Estimates calories burned through walking and incorporates them into the progress rating.
-- **Profile Persistence:** Stores user information in a Switch room document and updates it when necessary.
+- **Profile Management:** Maintains user information in a persistent Switch room document.
 
 ## 2. AI Agents
 
-The application consists of two agents connected through Switch. Each agent has a dedicated role and uses a different provider.
+The system consists of two specialized AI agents connected through Switch, each powered by a different provider.
 
 ### Init – Personal Profile and Nutrition Agent
 
 **Provider:** OpenCode
 
-Init handles the initial user interaction and nutritional planning.
+Init is responsible for the user's initial setup and nutritional planning.
 
-Responsibilities:
+Its responsibilities include:
 
-1. Greets new users and collects their personal information.
-2. Requests name, gender, age, height, weight, work type, and preferred breakfast, lunch, and dinner times.
-3. Provides two work-type choices:
-   - **Desk Work:** Office work, studying, programming, and other activities involving long periods of sitting.
-   - **Physical Work:** Construction, manual labor, and other jobs involving regular physical activity.
-4. Saves the information and avoids repeating onboarding questions unless the user requests an update.
-5. Calculates BMR and estimated daily calorie requirements.
-6. Calculates BMI and adjusts calorie recommendations according to the result.
-7. Divides daily calories into three main meals and three snacks.
-8. Creates and maintains a `user-profile` document in the Switch room.
+- Greeting new users and collecting their personal information.
+- Collecting name, gender, age, height, weight, work type, and preferred breakfast, lunch, and dinner times.
+- Providing two work-type options:
+  - **Desk Work:** Office work, studying, programming, and other activities involving long periods of sitting.
+  - **Physical Work:** Construction, manual labor, and other jobs involving regular physical activity.
+- Avoiding repeated onboarding questions unless the user requests an update.
+- Calculating BMR and estimated daily calorie requirements.
+- Calculating BMI and adjusting calorie recommendations according to the result.
+- Dividing daily calories into three main meals and three snacks.
+- Creating and maintaining a `user-profile` document in the Switch room.
 
 ### System – Food Tracking and Progress Agent
 
@@ -55,41 +55,51 @@ Responsibilities:
 
 System handles food recognition, meal evaluation, and daily progress tracking.
 
-Responsibilities:
+Its responsibilities include:
 
-1. Receives food pictures from users and identifies the food.
-2. Uses the provided food name when available. Otherwise, it estimates the food identity and requests confirmation.
-3. Estimates the calories of identified food.
-4. Confirms the identification and calorie estimation before recording a meal.
-5. Suggests meal improvements when necessary.
-6. Allows users to accept suggestions or keep their original meal.
-7. Records the final confirmed meal and updates the remaining calorie allowance.
-8. Maintains a progress rating between 0% and 100%.
-9. Suggests walking when users exceed their recommended meal calories.
-10. Estimates calories burned based on the user's profile and reported walking duration.
-11. Updates the rating according to food consumption and physical activity.
+- Identifying food from user-submitted pictures.
+- Using the provided food name or estimating it when no name is provided.
+- Obtaining user confirmation before recording food.
+- Estimating the calorie content of identified food.
+- Suggesting meal improvements when the meal exceeds its recommended calorie allowance.
+- Allowing users to accept suggestions or keep their original meal.
+- Recording the final confirmed meal and updating the remaining daily calorie allowance.
+- Maintaining a progress rating between 0% and 100%.
+- Suggesting physical activity when users exceed their recommended meal calories.
+- Estimating calories burned based on the user's profile and reported walking duration.
+- Updating the progress rating according to food consumption and physical activity.
 
 ## 3. Nutritional Calculations
 
 ### Basal Metabolic Rate (BMR)
 
-The system uses the following formula:
+The assistant calculates BMR using the Mifflin-St Jeor equation, taking the user's gender into account.
+
+**Male:**
 
 ```
-BMR = 10 × weight(kg)
-    + 6.25 × height(cm)
-    - 5 × age(years)
-    + 5
+BMR = (10 × Weight) + (6.25 × Height)
+      - (5 × Age) + 5
 ```
 
-The formula above is the male version of the Mifflin-St Jeor equation. Gender-specific calculations should be used when implementing the female version.
+**Female:**
+
+```
+BMR = (10 × Weight) + (6.25 × Height)
+      - (5 × Age) - 161
+```
+
+Where:
+- Weight is measured in kilograms.
+- Height is measured in centimeters.
+- Age is measured in years.
 
 ### Daily Calorie Requirements
 
-Daily calorie requirements are estimated using the activity multiplier:
+Daily calorie requirements are estimated using the user's activity level:
 
 ```
-Daily Calories = BMR × Activity Level
+Daily Calories = BMR × Activity Multiplier
 ```
 
 | Work Type | Activity Multiplier |
@@ -99,62 +109,58 @@ Daily Calories = BMR × Activity Level
 
 ### Body Mass Index (BMI)
 
-BMI is calculated using:
+BMI is calculated using the user's weight and height:
 
 ```
-BMI = weight(kg) / height(m)²
+BMI = Weight (kg) / Height (m)²
 ```
 
-The system classifies adult BMI results as follows:
+The assistant uses the following adult BMI classifications:
 
-| BMI | Classification |
+| BMI Range | Classification |
 |---|---|
 | Below 18.5 | Underweight |
-| 18.5 – 24.9 | Normal weight |
+| 18.5 – 24.9 | Normal Weight |
 | 25 – 29.9 | Overweight |
 | 30 or above | Obesity |
 
-The daily calorie target is adjusted according to the classification:
+Based on the calculated BMI, the assistant adjusts the calorie target:
 
-- Underweight: Increase calorie intake.
-- Normal weight: Maintain estimated daily requirements.
-- Overweight: Apply a moderate calorie deficit.
-- Obesity: Apply a calorie deficit.
-
-These classifications are general adult screening guidelines, not medical diagnoses. The system should not prescribe aggressive calorie restrictions.
+- **Underweight:** Increase calorie intake.
+- **Normal Weight:** Maintain estimated daily calorie requirements.
+- **Overweight:** Apply a moderate calorie deficit.
+- **Obesity:** Apply a calorie deficit.
 
 ### Meal Distribution
 
-The daily calorie target is divided into six portions.
+The daily calorie target is divided into three main meals and three snacks.
 
-**Main Meals**
-
-Two-thirds of daily calories are allocated to breakfast, lunch, and dinner:
+**Main Meals:**
 
 ```
-Calories per Main Meal = (Daily Calories × 2/3) / 3
+Calories per Meal = (Daily Calories × 2/3) / 3
 ```
 
-**Snacks**
-
-One-third of daily calories is allocated to three snacks:
+**Snacks:**
 
 ```
 Calories per Snack = (Daily Calories × 1/3) / 3
 ```
 
+This distribution provides users with a daily calorie allowance for each meal and snack.
+
 ## 4. Progress Rating System
 
-The system maintains a daily rating between 0% and 100%, starting at 0%.
+The assistant maintains a daily progress rating between 0% and 100%, starting at 0%.
 
 The rating reflects how closely the user follows the recommended calorie plan.
 
 ### Rating Rules
 
-- Following the recommended meal allowance increases the rating.
-- Exceeding the recommended meal allowance decreases the rating.
-- Physical activity can increase the rating according to estimated calories burned.
-- Rating changes are calculated proportionally to the user's total daily calorie requirement.
+- Following recommended meal allowances increases the rating.
+- Exceeding recommended meal allowances decreases the rating.
+- Physical activity increases the rating according to estimated calories burned.
+- Rating changes are calculated proportionally to the user's total daily calorie requirements.
 - The rating cannot exceed 100% or fall below 0%.
 
 ### Example
@@ -164,11 +170,11 @@ Assume the user's daily calorie requirement is 2,000 calories.
 - Exceeding a meal allowance by 400 calories represents 20% of the daily requirement, resulting in a 20-percentage-point deduction.
 - Burning 200 calories through walking represents 10% of the daily requirement, resulting in a 10-percentage-point increase.
 
-The rating is updated after each confirmed meal or recorded physical activity.
+The rating is updated after confirmed meals and recorded physical activities.
 
 ## 5. System Architecture
 
-Telegram acts as the main user interface, while Switch coordinates communication between the two agents.
+Telegram serves as the main communication interface, while Switch coordinates the two AI agents.
 
 ```mermaid
 flowchart TD
@@ -198,34 +204,34 @@ flowchart TD
 
 ### Main Workflow
 
-**Initial Setup**
+**Initial Setup and Nutritional Planning**
 
-1. User starts a conversation with the Telegram bot.
-2. Init collects personal information and meal preferences.
+1. The user starts a conversation with the Telegram bot.
+2. Init collects personal information and preferred meal times.
 3. Init calculates BMR, BMI, and estimated daily calorie requirements.
 4. Daily calories are divided into main meals and snacks.
-5. User information and nutritional calculations are saved in the `user-profile` document.
+5. The information is saved in the `user-profile` document.
 
 **Food Tracking**
 
-1. User sends a picture of a meal.
+1. The user sends a picture of a meal.
 2. System identifies the food and estimates its calories.
-3. User confirms the food identification and calorie estimation.
-4. System suggests improvements when the meal exceeds its recommended allowance.
-5. User accepts the suggestions or keeps the original meal.
+3. The user confirms the identification and calorie estimation.
+4. System suggests improvements when necessary.
+5. The user accepts the suggestions or keeps the original meal.
 6. The final confirmed calorie amount is deducted from the remaining daily allowance.
 7. The progress rating is updated.
 
 **Physical Activity**
 
-1. System suggests walking only when the user exceeds a meal's recommended calorie allowance.
-2. User can accept the suggestion or report a different walking duration.
+1. System suggests walking when the user exceeds a meal's recommended calorie allowance.
+2. The user can accept the suggestion or report a different walking duration.
 3. System estimates the calories burned.
 4. The progress rating is updated accordingly.
 
 ## 6. Demo
 
-The project is demonstrated through a Telegram bot.
+The project is demonstrated through a Telegram bot, covering the complete process from user registration to daily food tracking.
 
 ### Demo Scenarios
 
@@ -233,12 +239,12 @@ The project is demonstrated through a Telegram bot.
 - Start a conversation with the bot.
 - Provide personal information and preferred meal times.
 - Receive personalized nutritional calculations.
-- Verify the generated user profile.
+- View the generated user profile.
 
 **Food Recognition**
 - Send a picture of a meal.
 - Receive food identification and calorie estimation.
-- Confirm the result before recording.
+- Confirm the result before recording it.
 
 **Meal Improvement**
 - Submit a meal that exceeds the recommended allowance.
@@ -252,25 +258,25 @@ The project is demonstrated through a Telegram bot.
 - View estimated calories burned and the updated rating.
 
 **Profile Management**
-- Request changes to personal information.
-- Verify that the stored profile is updated.
+- Request an update to personal information.
+- Verify that the stored profile reflects the changes.
 
-**Demo Video:** [Add demo video link here]
+**Demo Video:** [Add demo video link]
 
-**Screenshots:** [Add screenshots here]
+**Screenshots:** [Add screenshots or a link to the screenshots directory]
 
 ## 7. Technologies Used
 
 | Technology | Purpose |
 |---|---|
-| Telegram Bot | User interaction and notifications |
+| Telegram Bot | User interaction |
 | Switch | Agent coordination and room management |
 | OpenCode | Provider powering the Init agent |
 | Codex | Provider powering the System agent |
 | AI Vision | Food identification from pictures |
 | Switch Room Documents | Persistent user profile storage |
 
-## 8. Installation and Setup
+## 8. Getting Started
 
 ### Prerequisites
 
@@ -295,7 +301,7 @@ cd PROJECT
    - `init` using the OpenCode provider.
    - `system` using the Codex provider.
 
-4. Configure each agent with its respective responsibilities and instructions.
+4. Configure each agent with its respective responsibilities.
 
 5. Create a Switch room and connect both agents to it.
 
@@ -311,20 +317,10 @@ On the first interaction, Init handles user registration and creates the nutriti
 
 After the initial setup, users can share food pictures with the bot to track their meals, receive suggestions, and monitor their daily progress.
 
-## 9. Important Notes
+## 9. Disclaimer
 
-- Calorie estimates and food recognition results are approximate.
-- Food must be confirmed before it is recorded.
-- BMI is a general screening measurement and does not replace professional medical assessment.
-- The assistant is an AI tool, not a doctor or dietitian.
-- Users should consult a qualified healthcare professional before making significant dietary changes.
-
-## 10. Team
-
-**Project Contributors:**
-
-- [Add team member names and GitHub profiles]
+This assistant provides AI-generated nutritional estimates and general wellness guidance. Food calorie estimations and BMI classifications may not always be accurate. It is not a substitute for professional medical advice. Users should consult a qualified healthcare professional before making significant dietary changes.
 
 ---
 
-Built for the **Flip the Switch Hackathon** by WeMakeDevs.
+**Built for the Flip the Switch Hackathon by WeMakeDevs.**
