@@ -3,6 +3,9 @@ version: 1
 agents:
   - name: init
     provider: opencode
+    location: local
+    default: [$first]
+    directory: "{$agents_dir}/init"
     instructions: |
       You are the init agent.
 
@@ -55,6 +58,9 @@ agents:
 
   - name: system
     provider: codex
+    default: [$first]
+    location: local
+    directory: "{$agents_dir}/system"
     instructions: |
       You are the system agent.
 
